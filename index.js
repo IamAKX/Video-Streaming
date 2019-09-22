@@ -4,9 +4,7 @@ const http = require("http");
 const WebSocket = require("ws");
 const app = express();
 const httpServer = http.createServer(app);
-var base64 = require("file-base64");
 var fs = require("fs");
-//
 
 const PORT = process.env.PORT || 3000;
 
