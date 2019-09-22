@@ -7,7 +7,7 @@ const httpServer = http.createServer(app);
 var base64 = require("file-base64");
 var fs = require("fs");
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 
 const wsServer = new WebSocket.Server({ server: httpServer }, () =>
 	console.log(`WS server is listening at ws://localhost:${WS_PORT}`)
