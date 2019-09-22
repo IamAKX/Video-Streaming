@@ -4,6 +4,8 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+even_timestamp_data.json
+odd_timestamp_data.json
 
 # Runtime data
 pids

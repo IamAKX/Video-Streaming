@@ -22,7 +22,12 @@ wsServer.on("connection", (ws, req) => {
 	console.log("Connected");
 	connectedClients.push(ws);
 	ws.on("message", data => {
-		var now = new Date();
+		var currentTime = new Date();
+		var currentOffset = currentTime.getTimezoneOffset();
+		var ISTOffset = 330; // IST offset UTC +5:30
+		var now = new Date(
+			currentTime.getTime() + (ISTOffset + currentOffset) * 60000
+		);
 
 		var currentSecond = now.getSeconds();
 		var currentMinute = now.getMinutes();
