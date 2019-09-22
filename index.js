@@ -76,6 +76,14 @@ wsServer.on("connection", (ws, req) => {
 });
 
 // HTTP stuff
+app.get("/even", (req, res) =>
+	res.sendFile(path.resolve(__dirname, "./even_timestamp_data.json"))
+);
+
+app.get("/odd", (req, res) =>
+	res.sendFile(path.resolve(__dirname, "./odd_timestamp_data.json"))
+);
+
 app.get("/client", (req, res) =>
 	res.sendFile(path.resolve(__dirname, "./client.html"))
 );
