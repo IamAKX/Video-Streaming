@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Mouse</title>
+		<script type="text/javascript">
+			var report = { mouseLog: [] };
+			document.onmousedown = function(event) {
+				var keyCode = event.button;
+				var keyName = "";
+				switch (keyCode) {
+					case 0:
+						keyName = "Left Mouse Button";
+						break;
+					case 1:
+						keyName = "Middle Mouse Button";
+						break;
+					case 2:
+						keyName = "Right Mouse Button";
+						break;
+				}
+
+				var currentTime = new Date();
+				var currentOffset = currentTime.getTimezoneOffset();
+				var ISTOffset = 330; // IST offset UTC +5:30
+				var now = new Date(
+					currentTime.getTime() + (ISTOffset + currentOffset) * 60000
+				);
+
+				// var now = new Date();
+				var timestamp = now
+					.toISOString()
+					.replace(/T/, " ")
+					.replace(/\..+/, "");
+
+				document.getElementById("mousename").innerHTML = keyName;
+				document.getElementById("mousecode").innerHTML = keyCode;
+				document.getElementById("timestamp").innerHTML = timestamp;
+
+				report.mouseLog.push({
+					keyname: keyName,
+					keycode: keyCode,
+					timestamp: timestamp
+				});
+
+				document.getElementById("json").innerHTML = JSON.stringify(
+					report,
+					null,
+					"\t"
+				);
+			};
+
+			function download(content, fileName, contentType) {
+				var a = document.createElement("a");
+				var file = new Blob([content], { type: contentType });
+				a.href = URL.createObjectURL(file);
+				a.download = fileName;
+				a.click();
+			}
+		</script>
+	</head>
+	<body>
+		Key Name : <span id="mousename"></span><br />
+		Key Code : <span id="mousecode"></span><br />
+		Timestamp : <span id="timestamp"></span><br /><br /><br />
+		<input
+			type="button"
+			value="Download json"
+			onclick="download(JSON.stringify(report,null,'\t'), 'MouseLog.json', 'text/plain');"
+		/>
+		<br />
+		<br />
+		JSON : <br />
+		<pre id="json"></pre>
+	</body>
+</html>

@@ -5,7 +5,7 @@ const WebSocket = require("./node_modules/ws");
 const app = express();
 const httpServer = http.createServer(app);
 var fs = require("fs");
-
+var location = require("location-href");
 const PORT = process.env.PORT || 3000;
 
 const wsServer = new WebSocket.Server({ server: httpServer }, () =>
@@ -75,6 +75,8 @@ wsServer.on("connection", (ws, req) => {
 			} else {
 				// if it's not connected remove from the array of connected ws
 				connectedClients.splice(i, 1);
+				//
+				console.log("Dead", location());
 			}
 		});
 	});
@@ -95,12 +97,35 @@ app.get("/client", (req, res) =>
 app.get("/streamer", (req, res) =>
 	res.sendFile(path.resolve(__dirname, "./streamer.html"))
 );
+
+app.get("/keyboard", (req, res) =>
+	res.sendFile(path.resolve(__dirname, "./keyboard.html"))
+);
+
+app.get("/mouse", (req, res) =>
+	res.sendFile(path.resolve(__dirname, "./mouse.html"))
+);
+
+app.get("/audio", (req, res) =>
+	res.sendFile(path.resolve(__dirname, "./audio.html"))
+);
+
+app.get("/location", (req, res) =>
+	res.sendFile(path.resolve(__dirname, "./location.html"))
+);
+
 app.get("/", (req, res) => {
 	res.send(`
         <a href="streamer">Streamer</a><br>
-        <a href="client">Client</a>
+		<a href="client">Client</a><br>
+		<hr>
+		<a href="keyboard">keyboard</a><br>
+		<a href="mouse">mouse</a><br>
+		<a href="audio">audio</a><br>
+		<a href="location">location</a><br>
     `);
 });
+
 httpServer.listen(PORT, () =>
 	console.log(`HTTP server listening at http://localhost:${PORT}`)
 );

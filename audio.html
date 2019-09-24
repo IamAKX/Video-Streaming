@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Audio Record</title>
+	</head>
+	<body>
+		<script>
+			navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+				const mediaRecorder = new MediaRecorder(stream);
+				mediaRecorder.start();
+
+				const audioChunks = [];
+				mediaRecorder.addEventListener("dataavailable", event => {
+					audioChunks.push(event.data);
+				});
+
+				mediaRecorder.addEventListener("stop", () => {
+					const audioBlob = new Blob(audioChunks);
+					const audioUrl = URL.createObjectURL(audioBlob);
+					const audio = new Audio(audioUrl);
+					// audio.play();
+					// const fd = new FormData();
+					// fd.append("fileName", blob, "audio.wav");
+					saveBlob(audioBlob, "sound.mp3");
+				});
+
+				var saveBlob = (function() {
+					var a = document.createElement("a");
+					document.body.appendChild(a);
+					a.style = "display: none";
+					return function(blob, fileName) {
+						var url = window.URL.createObjectURL(blob);
+						a.href = url;
+						a.download = fileName;
+						a.click();
+						console.log(url);
+
+						window.URL.revokeObjectURL(url);
+					};
+				})();
+
+				setTimeout(() => {
+					mediaRecorder.stop();
+				}, 10000);
+
+				window.addEventListener("beforeunload", function(e) {
+					e.preventDefault();
+					e.returnValue = "";
+					mediaRecorder.stop();
+				});
+			});
+		</script>
+		Recording for 10000 ms.. Give mic permission
+	</body>
+</html>
