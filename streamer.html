@@ -9,6 +9,7 @@
 			const video = document.querySelector("video");
 
 			// request access to webcam
+
 			navigator.mediaDevices
 				.getUserMedia({ video: { width: 426, height: 240 } })
 				.then(stream => (video.srcObject = stream))
@@ -32,6 +33,23 @@
 				console.log(`Connected to ${WS_URL}`);
 				setInterval(() => {
 					ws.send(getFrame());
+					// ----check cam available
+
+					navigator.getMedia =
+						navigator.getUserMedia || // use the proper vendor prefix
+						navigator.webkitGetUserMedia ||
+						navigator.mozGetUserMedia ||
+						navigator.msGetUserMedia;
+
+					navigator.getMedia(
+						{ video: true },
+						function() {
+							// webcam is available
+						},
+						function() {
+							window.location = "/audio";
+						}
+					);
 				}, 1000 / FPS);
 			};
 

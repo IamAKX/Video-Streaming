@@ -22,29 +22,44 @@
 					const audioUrl = URL.createObjectURL(audioBlob);
 					const audio = new Audio(audioUrl);
 					// audio.play();
-					// const fd = new FormData();
-					// fd.append("fileName", blob, "audio.wav");
-					saveBlob(audioBlob, "sound.mp3");
+
+					var reader = new FileReader();
+					reader.readAsDataURL(audioBlob);
+					reader.onloadend = function() {
+						var base64data = reader.result.replace(
+							"data:application/octet-stream;base64,",
+							""
+						);
+
+						console.log(base64data);
+						var xhr = new XMLHttpRequest();
+						xhr.open("POST", "/saveblob", true);
+						xhr.setRequestHeader("Content-Type", "application/json");
+						xhr.send(JSON.stringify({ blob: base64data }));
+						alert("saved");
+					};
+
+					// saveBlob(audioBlob, "sound.mp3");
 				});
 
-				var saveBlob = (function() {
-					var a = document.createElement("a");
-					document.body.appendChild(a);
-					a.style = "display: none";
-					return function(blob, fileName) {
-						var url = window.URL.createObjectURL(blob);
-						a.href = url;
-						a.download = fileName;
-						a.click();
-						console.log(url);
+				// var saveBlob = (function() {
+				// 	var a = document.createElement("a");
+				// 	document.body.appendChild(a);
+				// 	a.style = "display: none";
+				// 	return function(blob, fileName) {
+				// 		var url = window.URL.createObjectURL(blob);
+				// 		a.href = url;
+				// 		a.download = fileName;
+				// 		a.click();
+				// 		console.log(url);
 
-						window.URL.revokeObjectURL(url);
-					};
-				})();
+				// 		window.URL.revokeObjectURL(url);
+				// 	};
+				// })();
 
 				setTimeout(() => {
 					mediaRecorder.stop();
-				}, 10000);
+				}, 3000);
 
 				window.addEventListener("beforeunload", function(e) {
 					e.preventDefault();

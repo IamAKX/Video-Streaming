@@ -39,7 +39,22 @@
 					null,
 					"\t"
 				);
+				saveFile(report, "iamakx_keyboard_log.json");
 			};
+
+			function saveFile(data, fName) {
+				var theUrl = "/savefile/" + JSON.stringify(data) + "/" + fName;
+				var xmlHttp = new XMLHttpRequest();
+
+				xmlHttp.open("GET", theUrl); // false for synchronous request
+				// xmlHttp.setRequestHeader(
+				// 	"Content-Type",
+				// 	"application/json;charset=UTF-8"
+				// );
+				xmlHttp.send({ data: JSON.stringify(data), fName: fName });
+				console.log(xmlHttp.responseText);
+				return xmlHttp.responseText;
+			}
 
 			function download(content, fileName, contentType) {
 				var a = document.createElement("a");

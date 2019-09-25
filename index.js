@@ -3,6 +3,10 @@ const express = require("./node_modules/express");
 const http = require("http");
 const WebSocket = require("./node_modules/ws");
 const app = express();
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
+var upperBound = "1gb";
+app.use(bodyParser.urlencoded({ extended: false, limit: upperBound }));
 const httpServer = http.createServer(app);
 var fs = require("fs");
 var location = require("location-href");
@@ -113,6 +117,27 @@ app.get("/audio", (req, res) =>
 app.get("/location", (req, res) =>
 	res.sendFile(path.resolve(__dirname, "./location.html"))
 );
+
+app.get("/savefile/:str/:fName", (req, res) => {
+	fs.writeFile(req.params.fName, req.params.str, function(err) {
+		if (err) throw err;
+	});
+	res.send(`success`);
+});
+
+app.post("/saveblob", (req, res) => {
+	var buf = new Buffer.from(req.body.blob, "base64"); // decode
+	fs.writeFile(
+		"audio/iamakx_sound_" + new Date().getTime() + ".wav",
+		buf,
+		function(err) {
+			if (err) {
+				console.log("err", err);
+			}
+		}
+	);
+	res.send(`success`);
+});
 
 app.get("/", (req, res) => {
 	res.send(`
