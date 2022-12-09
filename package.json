@@ -20,7 +20,7 @@
 	"homepage": "https://github.com/alexcambose/webcam-base64-streaming#readme",
 	"dependencies": {
 		"body-parser": "^1.19.0",
-		"express": "^4.16.3",
+		"express": "^4.17.3",
 		"location-href": "^1.0.0",
 		"ws": "^6.0.0"
 	}
